@@ -1,52 +1,42 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    int[] a = new int[10];
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator anim;
     [SerializeField] private LayerMask groundLayer;
-
     [SerializeField] private float speed = 5;
     [SerializeField] private float jumpForce = 350;
-    
+
     private bool isGrounded = true;
     private bool isJumping = false;
     private bool isAttack = false;
-    private bool isDeath = false;
-
-    private int coin = 0;
     
     private float horizontal;
 
     private string currentAnimName;
 
-    private Vector3 savePoint;
-
     // Start is called before the first frame update
     void Start()
     {
-        SavePoint();
-        OnInit();
+        
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+
+    //}
+
+    void FixedUpdate()
     {
-        if (isDeath)
-        {
-            return;
-        }   
-        Debug.Log(currentAnimName);
         isGrounded = CheckGrounded();
         //-1 -> 0 -> 1
         horizontal = Input.GetAxisRaw("Horizontal");
-        //Debug.Log("Print " + horizontal);
         //vertical = Input.GetAxisRaw("Vertical");
-        
+
         if (isAttack)
         {
             rb.velocity = Vector2.zero;
@@ -87,7 +77,6 @@ public class Player : MonoBehaviour
         //check falling
         if (!isGrounded && rb.velocity.y < 0)
         {
-            Debug.Log("to fall");
             ChangeAnim("fall");
             isJumping = false;
         }
@@ -108,14 +97,6 @@ public class Player : MonoBehaviour
         }
     }
     
-    public void OnInit()
-    {
-        isDeath = isAttack = false;
-
-        transform.position = savePoint;
-        ChangeAnim("idle");
-    }
-
     private bool CheckGrounded()
     {
         Debug.DrawLine(transform.position, transform.position + Vector3.down * 1.1f, Color.red);
@@ -136,7 +117,6 @@ public class Player : MonoBehaviour
 
     private void Attack()
     {
-        Debug.Log(nameof(Attack));
         ChangeAnim("attack");
         isAttack = true;
         Invoke(nameof(ResetAttack), 0.5f);
@@ -144,7 +124,6 @@ public class Player : MonoBehaviour
 
     private void Throw()
     {
-        Debug.Log(nameof(Throw));
         ChangeAnim("throw");
         isAttack = true;
         Invoke(nameof(ResetAttack), 0.5f);
@@ -152,8 +131,7 @@ public class Player : MonoBehaviour
 
     private void ResetAttack()
     {
-        Debug.Log(nameof(ResetAttack));
-        ChangeAnim("idle");
+        ChangeAnim("ilde");
         isAttack = false;
     }
 
@@ -168,30 +146,9 @@ public class Player : MonoBehaviour
     {
         if(currentAnimName != animName)
         {
-            Debug.Log("   " + currentAnimName + "-->" + animName);
             anim.ResetTrigger(animName);
             currentAnimName = animName;
             anim.SetTrigger(currentAnimName);
-        }
-    }
-    internal void SavePoint()
-    {
-        savePoint = transform.position;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "Coin")
-        {
-            ++coin;
-            Destroy(collision.gameObject);
-        }
-
-        if(collision.tag == "DeathZone")
-        {
-            isDeath = true;
-            ChangeAnim("die");
-            Invoke(nameof(OnInit), 1f);
         }
     }
 }
