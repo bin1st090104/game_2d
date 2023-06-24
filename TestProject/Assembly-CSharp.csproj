@@ -58,12 +58,12 @@
   <ItemGroup>
     <Compile Include="Assets\ex9_script.cs" />
     <Compile Include="Assets\ex8_script.cs" />
+    <Compile Include="Assets\ex11_script.cs" />
     <Compile Include="Assets\ex10_script.cs" />
     <Compile Include="Assets\exercise1.cs" />
     <Compile Include="Assets\move_4_direct.cs" />
     <Compile Include="Assets\move.cs" />
     <Compile Include="Assets\ex7_script.cs" />
-    <Compile Include="Assets\ex11_script.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
